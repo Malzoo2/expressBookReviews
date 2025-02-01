@@ -13,13 +13,17 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 app.use("/customer/auth/*", function auth(req,res,next){
 //Write the authenication mechanism here
     if (req.session.authorization){
-        let token = req.session.authorization['accessToken'];
+        let token = req.session.authorization['accessTkn'];
+        //let token2 = req.session.authorization['access'];
+        //console.log("token in /customer/auth is"+token);
+        
 
         jwt.verify(token, "access", (err, user)=>{
             if (!err){
                 req.user = user;
                 next();
             }else{
+                console.log('err is '+err);
                 return res.status(403).json({message: "User is not authenticated"});
             }
         });
